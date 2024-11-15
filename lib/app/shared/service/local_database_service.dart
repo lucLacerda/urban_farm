@@ -47,28 +47,27 @@ class LocalDatabaseService {
       CREATE TABLE items (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
+        description TEXT,
         price REAL
       )
     ''');
   }
 
-  // Adicionar um novo item
   Future<int> addItem(Item item) async {
     final db = await database;
     return await db.insert('items', item.toMap());
   }
 
-  // Buscar todos os itens
   Future<List<Item>> getItems() async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query('items');
 
-    return List.generate(maps.length, (i) {
-      return Item.fromMap(maps[i]);
-    });
+    return List.generate(
+      maps.length,
+      (i) => Item.fromMap(maps[i]),
+    );
   }
 
-  // Atualizar um item
   Future<int> updateItem(Item item) async {
     final db = await database;
     return await db.update(

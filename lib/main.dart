@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:urban_farm/app/app.dart';
-import 'package:urban_farm/app/core/bindings/app_bindings.dart';
+import 'package:urban_farm/lib.dart';
 
 void main() {
   runApp(

@@ -1,7 +1,5 @@
 import 'package:get/get.dart';
-import 'package:urban_farm/app/app.dart';
-
-import 'home_controller.dart';
+import 'package:urban_farm/lib.dart';
 
 class HomeBinding extends Bindings {
   @override

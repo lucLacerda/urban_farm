@@ -36,7 +36,7 @@ class HomePage extends GetView<HomeController> {
             Container(
               margin: const EdgeInsets.all(16),
               child: ElevatedButton(
-                onPressed: controller.navigateToFarm,
+                onPressed: controller.addItem,
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 50),
                   backgroundColor: Colors.green,
@@ -60,77 +60,184 @@ class HomePage extends GetView<HomeController> {
 
   Widget itemTile(final Item item) => Column(
         children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                color: Colors.green,
+          GestureDetector(
+            onTap: () => openBottomSheet(item),
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                vertical: 8,
+                horizontal: 10,
               ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  item.name,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: Colors.green,
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    item.name,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                PopupMenuButton<String>(
-                  icon: const Icon(Icons.more_vert_outlined),
-                  onSelected: (value) {
-                    if (value == 'edit') {
-                      // controller.editItem(item);
-                    } else if (value == 'delete') {
-                      controller.deleteItem(item.id!);
-                    }
-                  },
-                  itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                    const PopupMenuItem<String>(
-                      value: 'edit',
-                      child: ListTile(
-                        leading: Icon(
-                          Icons.edit,
-                          size: 20,
-                        ),
-                        title: Text(
-                          'Editar',
-                          style: TextStyle(
-                            fontSize: 12,
+                  PopupMenuButton(
+                    icon: const Icon(Icons.more_vert_outlined),
+                    onSelected: (value) {
+                      if (value == 'edit') {
+                        controller.editItem(item);
+                      } else if (value == 'delete') {
+                        controller.deleteItem(item.id!);
+                      }
+                    },
+                    itemBuilder: (BuildContext context) => [
+                      const PopupMenuItem(
+                        value: 'edit',
+                        child: ListTile(
+                          leading: Icon(
+                            Icons.edit,
+                            size: 20,
+                          ),
+                          title: Text(
+                            'Editar',
+                            style: TextStyle(
+                              fontSize: 12,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    const PopupMenuItem<String>(
-                      value: 'delete',
-                      child: ListTile(
-                        leading: Icon(
-                          Icons.delete,
-                          size: 20,
-                        ),
-                        title: Text(
-                          'Remover',
-                          style: TextStyle(
-                            fontSize: 12,
+                      const PopupMenuItem(
+                        value: 'delete',
+                        child: ListTile(
+                          leading: Icon(
+                            Icons.delete,
+                            size: 20,
+                          ),
+                          title: Text(
+                            'Remover',
+                            style: TextStyle(
+                              fontSize: 12,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 16),
         ],
       );
 
+  void openBottomSheet(final Item item) => Get.bottomSheet(
+        Container(
+          height: Get.height * 0.45,
+          width: Get.width,
+          padding: const EdgeInsets.symmetric(
+            vertical: 32,
+            horizontal: 16,
+          ),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Center(
+                child: Text(
+                  item.name,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Text(
+                    item.description,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Center(
+                child: Text(
+                  formatCurrency(item.price),
+                  style: const TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Get.back();
+                        controller.editItem(item);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text(
+                        'Editar',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        controller.deleteItem(item.id!);
+                        Get.back();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        backgroundColor: Colors.red,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text(
+                        'Remover',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+
   Widget tileItem(final int index) {
     return ListTile(
       title: Text('Item $index'),
-      trailing: Icon(Icons.more_vert_outlined),
+      trailing: const Icon(Icons.more_vert_outlined),
     );
   }
 }

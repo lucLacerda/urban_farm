@@ -10,11 +10,17 @@ class HomeController extends SuperController {
 
   final items = <Item>[].obs;
 
-  Future<void> navigateToFarm() async {
+  Future<void> addItem() async {
     final result = await Get.toNamed('/farm');
+    if (result == null) {
+      return;
+    }
+    refreshList();
+  }
 
-    final item = Item.fromMap(result);
-    items.add(item);
+  void refreshList() {
+    items.clear();
+    getItems();
   }
 
   Future<void> getItems() async {
@@ -24,6 +30,12 @@ class HomeController extends SuperController {
   Future<void> deleteItem(final int id) async {
     await dbService.deleteItem(id);
     items.removeWhere((item) => item.id == id);
+  }
+
+  Future<void> editItem(final Item item) async {
+    await Get.toNamed('/farm', arguments: item.toMap());
+
+    refreshList();
   }
 
   @override
@@ -48,7 +60,5 @@ class HomeController extends SuperController {
   void onPaused() {}
 
   @override
-  Future<void> onResumed() async {
-    items.addAll(await dbService.getItems());
-  }
+  Future<void> onResumed() async {}
 }

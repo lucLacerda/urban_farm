@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:urban_farm/app/app.dart';
 
-import 'auth_controller.dart';
-
 class AuthPage extends GetView<AuthController> {
   AuthPage({super.key});
 
