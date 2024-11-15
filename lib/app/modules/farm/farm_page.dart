@@ -1,9 +1,7 @@
 import 'package:easy_mask/easy_mask.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-
-import 'farm_controller.dart';
+import 'package:urban_farm/app/app.dart';
 
 class FarmPage extends GetView<FarmController> {
   FarmPage({super.key});
@@ -73,7 +71,12 @@ class FarmPage extends GetView<FarmController> {
             Container(
               margin: const EdgeInsets.all(16),
               child: ElevatedButton(
-                onPressed: () => Get.toNamed('/farm'),
+                onPressed: () => controller.addItem(
+                  Item(
+                    name: _nameTextController.text,
+                    price: double.tryParse(_moneyTextController.value.text.replaceAll(',', '.')) ?? 0,
+                  ),
+                ),
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 50),
                   backgroundColor: Colors.green,

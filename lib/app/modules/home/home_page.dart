@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import 'home_controller.dart';
+import 'package:urban_farm/app/app.dart';
 
 class HomePage extends GetView<HomeController> {
   const HomePage({super.key});
@@ -18,17 +17,18 @@ class HomePage extends GetView<HomeController> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Column(
-                    children: [
-                      ...List.generate(
-                        20,
-                        (final index) => itemTile(index + 1),
-                      ),
-                    ],
+            Obx(
+              () => Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      children: controller.items
+                          .map(
+                            (final item) => itemTile(item),
+                          )
+                          .toList(),
+                    ),
                   ),
                 ),
               ),
@@ -36,7 +36,7 @@ class HomePage extends GetView<HomeController> {
             Container(
               margin: const EdgeInsets.all(16),
               child: ElevatedButton(
-                onPressed: () => Get.toNamed('/farm'),
+                onPressed: controller.navigateToFarm,
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 50),
                   backgroundColor: Colors.green,
@@ -58,7 +58,7 @@ class HomePage extends GetView<HomeController> {
     );
   }
 
-  Widget itemTile(final int index) => Column(
+  Widget itemTile(final Item item) => Column(
         children: [
           Container(
             padding: const EdgeInsets.all(10),
@@ -72,17 +72,53 @@ class HomePage extends GetView<HomeController> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Item $index',
+                  item.name,
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {},
-                  child: const Icon(
-                    Icons.more_vert_outlined,
-                  ),
+                PopupMenuButton<String>(
+                  icon: const Icon(Icons.more_vert_outlined),
+                  onSelected: (value) {
+                    if (value == 'edit') {
+                      // controller.editItem(item);
+                    } else if (value == 'delete') {
+                      controller.deleteItem(item.id!);
+                    }
+                  },
+                  itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                    const PopupMenuItem<String>(
+                      value: 'edit',
+                      child: ListTile(
+                        leading: Icon(
+                          Icons.edit,
+                          size: 20,
+                        ),
+                        title: Text(
+                          'Editar',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const PopupMenuItem<String>(
+                      value: 'delete',
+                      child: ListTile(
+                        leading: Icon(
+                          Icons.delete,
+                          size: 20,
+                        ),
+                        title: Text(
+                          'Remover',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

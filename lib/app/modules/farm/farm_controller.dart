@@ -1,7 +1,12 @@
 import 'package:get/get.dart';
+import 'package:urban_farm/lib.dart';
 
 class FarmController extends GetxController {
-  //TODO: Implement FarmController.
+  FarmController(
+    this.dbService,
+  );
+
+  final LocalDatabaseService dbService;
 
   @override
   void onInit() {
@@ -11,6 +16,12 @@ class FarmController extends GetxController {
   @override
   void onReady() {
     super.onReady();
+  }
+
+  Future<void> addItem(Item item) async {
+    await dbService.addItem(item);
+
+    Get.back(result: item.toMap());
   }
 
   @override

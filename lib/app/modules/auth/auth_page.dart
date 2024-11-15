@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:urban_farm/app/app.dart';
 
 import 'auth_controller.dart';
 
@@ -11,13 +12,11 @@ class AuthPage extends GetView<AuthController> {
   final TextEditingController _passwordController = TextEditingController();
 
   void _login() {
-    if (_formKey.currentState!.validate()) {
+    // if (_formKey.currentState!.validate()) {
+    if (true) {
       // String email = _emailController.text;
       // String password = _passwordController.text;
-      ScaffoldMessenger.of(Get.context!).showSnackBar(
-        const SnackBar(content: Text('Login realizado com sucesso!')),
-      );
-
+      showSuccess(message: 'Login realizado com sucesso!', duration: 2);
       Get.offNamed('/home');
     }
   }
