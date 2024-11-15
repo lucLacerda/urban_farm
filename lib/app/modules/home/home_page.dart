@@ -10,7 +10,7 @@ class HomePage extends GetView<HomeController> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Urban farm',
+          'Fazenda Urbana',
         ),
       ),
       body: SafeArea(
