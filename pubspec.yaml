@@ -13,6 +13,8 @@ dependencies:
 
   cupertino_icons: 1.0.8
   get: 4.6.6
+  easy_mask: 2.0.1
+  shared_preferences: 2.3.3
 
 dev_dependencies:
   flutter_test:

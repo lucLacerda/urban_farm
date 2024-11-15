@@ -11,7 +11,7 @@ class AuthRoutes {
   static final routes = [
     GetPage(
       name: auth,
-      page: () => const AuthPage(),
+      page: AuthPage.new,
       binding: AuthBinding(),
     ),
   ];

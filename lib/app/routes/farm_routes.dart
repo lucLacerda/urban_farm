@@ -11,7 +11,7 @@ class FarmRoutes {
   static final routes = [
     GetPage(
       name: farm,
-      page: () => const FarmPage(),
+      page: FarmPage.new,
       binding: FarmBinding(),
     ),
   ];
